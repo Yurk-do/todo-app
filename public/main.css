@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+#root {
+    width: 100%;
+}
+#app-container {
+    border: 1px solid red;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.editor-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row-left {
+    border: 1px blue;
+    margin-top: 10px;
+}
+
+.form-row-right {
+  display: flex;
+  justify-content: flex-end;
+  border: 1px blue;
+  margin-top: 10px;
+}
+.form-row-right > input:not(:last-child) {
+  margin-right: 10px;
+} 
+
+
+#todo-text {
+    width: 100%;
+}
