@@ -1,13 +1,11 @@
 import { getTodoInput } from "./helpers.js";
-import Todo from "./module/todo.js";
-import todoStorage from "./module/todoStorage.js";
+import todoStorage from "./model/todoStorage.js";
+import renderTodoList from "./view/todoList.js";
 
 function addTodoHandler(doc) {
   console.log("add button clicked");
   const todoTextInput = getTodoInput(doc);
-  todoStorage.save(new Todo(todoTextInput.value));
-  todoTextInput.value = "";
-  console.log(todoStorage);
+  todoStorage.createTodo(todoTextInput.value);
 
   // Создание собственного события
   const todoItemCreated = new Event("todo-item-created");
@@ -26,26 +24,58 @@ function updateTotalTodoCount(doc) {
   h2.innerHTML = `Total Todo Count: ${todoStorage.totalTodoCount()}`;
 }
 
-function createTodoElement(doc, todo) {
-  const todoItem = doc.createElement("div");
-  todoItem.className = "item";
-  todoItem.innerHTML = JSON.stringify(todo);
-
-  return todoItem;
-}
-
 function updateTodoList(doc) {
   console.log("Updating Todo List");
 
-  const todoListElement = doc.querySelector(".todo-list");
+  const allTodo = todoStorage.getAllTodo();
+  renderTodoList(doc, allTodo);
+}
 
-  // удаление всех потомков элемента
-  todoListElement.replaceChildren();
+function notifyAboutTodoChange(doc) {
+  const todoItemChange = new Event("todo-item-changed");
+  doc.dispatchEvent(todoItemChange);
+}
+function notifyAboutDeletedTodo(doc) {
+  const todoItemDeleted = new Event("todo-item-deleted");
+  doc.dispatchEvent(todoItemDeleted);
+}
 
-  todoStorage.getAllTodo().forEach((todo) => {
-    const todoElement = createTodoElement(doc, todo);
-    todoListElement.append(todoElement);
-  });
+function todoListActionHandler(doc, event) {
+  const actionName = event.target.dataset["action"];
+  const todoId = event.target.dataset["id"];
+
+  console.log(`Todo list Action clicked. Action: ${actionName}, id: ${todoId}`);
+
+  switch (actionName) {
+    case "view":
+      console.log(`Processing view action for id: ${todoId}`);
+      // window.location.href = `index.html/todo/${todoId}`;
+      // history.pushState({}, `Todo Id: ${todoId}`, `todo/${todoId}`);
+      break;
+    case "postpone":
+      console.log(`Processing postpone action for id: ${todoId}`);
+      todoStorage.postponeById(todoId);
+      notifyAboutTodoChange(doc);
+      break;
+    case "resume":
+      console.log(`Processing resume action for id: ${todoId}`);
+      todoStorage.resumeById(todoId);
+      notifyAboutTodoChange(doc);
+      break;
+    case "done":
+      console.log(`Processing postpone action for id: ${todoId}`);
+      todoStorage.completeById(todoId);
+      notifyAboutTodoChange(doc);
+      break;
+    case "delete":
+      console.log(`Processing postpone action for id: ${todoId}`);
+      todoStorage.deleteById(todoId);
+      notifyAboutDeletedTodo(doc);
+      break;
+
+    default:
+      console.log("Unknown action");
+  }
 }
 
 function setupEventListenerByName(doc, elementId, eventName, handler) {
@@ -69,6 +99,11 @@ function describeEventListeners(doc) {
       handler: clearFormHandler.bind(null, doc),
     },
     {
+      elementId: "todo-list",
+      eventName: "click",
+      handler: todoListActionHandler.bind(null, doc),
+    },
+    {
       element: doc,
       eventName: "todo-item-created",
       handler: updateTotalTodoCount.bind(null, doc),
@@ -76,6 +111,26 @@ function describeEventListeners(doc) {
     {
       element: doc,
       eventName: "todo-item-created",
+      handler: updateTodoList.bind(null, doc),
+    },
+    {
+      element: doc,
+      eventName: "todo-item-created",
+      handler: clearFormHandler.bind(null, doc),
+    },
+    {
+      element: doc,
+      eventName: "todo-item-changed",
+      handler: updateTodoList.bind(null, doc),
+    },
+    {
+      element: doc,
+      eventName: "todo-item-deleted",
+      handler: updateTotalTodoCount.bind(null, doc),
+    },
+    {
+      element: doc,
+      eventName: "todo-item-deleted",
       handler: updateTodoList.bind(null, doc),
     },
   ];

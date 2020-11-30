@@ -2,7 +2,7 @@ class TodoState {
   constructor() {
     this.InProcess = "in-process";
     this.Done = "done";
-    this.Posponed = "postponed";
+    this.Postponed = "postponed";
   }
 }
 

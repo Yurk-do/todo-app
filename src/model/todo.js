@@ -7,4 +7,14 @@ export default class Todo {
     this.dateCreated = new Date();
     this.dateCompleted = null;
   }
+  postpone() {
+    this.state = todoState.Postponed;
+  }
+  resume() {
+    this.state = todoState.InProcess;
+  }
+  done() {
+    this.state = todoState.Done;
+    this.dateCompleted = new Date();
+  }
 }
