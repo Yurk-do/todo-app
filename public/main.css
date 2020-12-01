@@ -14,7 +14,7 @@ body {
 
 #app-container {
     min-height: 100vh;
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     margin-top: 100px;
     background: rgba(255, 255, 255, 0.233);
@@ -127,6 +127,10 @@ h1, h2, h3 {
 
 .view-button {
   background-color: rgb(97, 97, 172);
+}
+.back-to-list-button {
+  width: 125px;
+  color: orangered;
 }
 .postpone-button {
   background-color: rgb(163, 122, 45);
