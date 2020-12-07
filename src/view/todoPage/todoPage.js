@@ -1,5 +1,8 @@
-import { createElement } from "../helpers.js";
-import todoState from "../model/todoState.js";
+import todoState from "../../model/todoState.js";
+import { createElement, clearRootElement } from "../../helpers.js";
+
+import { getTodoEventHandlers } from "../../events/todoEventHandlers.js";
+import { setupEventListeners } from "../../events.js";
 
 function renderTextBlock(doc, todo) {
   const textItem = createElement(doc, "h3");
@@ -9,12 +12,11 @@ function renderTextBlock(doc, todo) {
 
 function renderStatusPanel(doc, todo) {
   const statusPanel = createElement(doc, "p", "status-panel");
-
   let statusText = "Unknown state";
 
   if (todo.state === todoState.InProcess) statusText = "Task in progress";
-  if (todo.state === todoState.Done) statusText = "Task is done";
-  if (todo.state === todoState.Postponed) statusText = "Task is done";
+  if (todo.state === todoState.Done) statusText = "Task done";
+  if (todo.state === todoState.Postponed) statusText = "Task postponed";
 
   statusPanel.innerHTML = statusText;
 
@@ -22,44 +24,49 @@ function renderStatusPanel(doc, todo) {
 }
 
 function formatDateForPanel(prefix, date) {
-  const datePart = `${date.getDate()}.${date.getMonth() + 1}.${date.getYear()}`;
+  const datePart = `${date.getDate()}.${
+    date.getMonth() + 1
+  }.${date.getFullYear()}`;
 
-  const timePart = `${date.getHours()}:${
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
-  }`;
+  const timePart = `${date.getHours()}:${date.getMinutes()}`;
 
   return `${prefix}: ${datePart} - ${timePart}`;
 }
 
 function renderCreatedDatePanel(doc, todo) {
   const createdDatePanel = createElement(doc, "p", "created-date-panel");
+
   createdDatePanel.innerHTML = formatDateForPanel("Created", todo.dateCreated);
+
   return createdDatePanel;
 }
 
-function renderDonePanel(doc, todo) {
+function renderDoneDatePanel(doc, todo) {
   const doneDatePanel = createElement(doc, "p", "done-date-panel");
+
   doneDatePanel.innerHTML = formatDateForPanel("Completed", todo.dateCompleted);
+
   return doneDatePanel;
 }
+
 function renderInfoBlock(doc, todo) {
-  const infoBlock = createElement(doc, "p", "info-block");
+  const infoBlock = createElement(doc, "div", "info-block");
+
   infoBlock.append(renderStatusPanel(doc, todo));
   infoBlock.append(renderCreatedDatePanel(doc, todo));
   if (todo.dateCompleted !== null) {
-    infoBlock.append(renderDonePanel(doc, todo));
+    infoBlock.append(renderDoneDatePanel(doc, todo));
   }
 
   return infoBlock;
 }
-
-// actionName, todoId создание data атрибутов
 
 function renderButton(doc, actionName, todoId, className, title) {
   const button = createElement(doc, "button", className);
   button.innerHTML = title;
   button.setAttribute("data-action", actionName);
   button.setAttribute("data-id", todoId);
+
   return button;
 }
 
@@ -67,7 +74,13 @@ function renderControlBlock(doc, todo) {
   const controlBlock = createElement(doc, "div", "control-block");
 
   controlBlock.append(
-    renderButton(doc, "view", todo.id, "view-button", "View")
+    renderButton(
+      doc,
+      "back-to-list",
+      todo.id,
+      "back-to-list-button",
+      "Back to list"
+    )
   );
 
   if (todo.state === todoState.InProcess) {
@@ -98,12 +111,20 @@ function renderControlBlock(doc, todo) {
   return controlBlock;
 }
 
-export default function renderTodoItem(doc, todo) {
+export default function renderTodoPage(doc, todo) {
+  const rootElement = clearRootElement(doc);
+
+  const container = createElement(doc, "div");
+  container.id = "todo-list";
+
   const todoItem = createElement(doc, "div", "item");
+
   todoItem.append(renderTextBlock(doc, todo));
   todoItem.append(renderInfoBlock(doc, todo));
   todoItem.append(renderControlBlock(doc, todo));
-  //   todoItem.innerHTML = JSON.stringify(todo);
 
-  return todoItem;
+  container.append(todoItem);
+  rootElement.append(container);
+
+  setupEventListeners(doc, getTodoEventHandlers(doc));
 }

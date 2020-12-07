@@ -7,6 +7,7 @@ body {
 }
 
 #root {
+    min-height: 100vh;
     width: 100%;
     font-weight: 700;
     font-size: 20px;
@@ -19,6 +20,7 @@ body {
     margin-top: 100px;
     background: rgba(255, 255, 255, 0.233);
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    border-radius: 20px;
 }
 h1, h2, h3 {
   padding-top: 20px;
@@ -70,23 +72,48 @@ h1, h2, h3 {
 }
 
 .item {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 10px;
   padding-left: 20px;
   padding-right: 20px;
   margin-bottom: 10px;
   background-color: rgba(172, 206, 224, 0.671);
+  border-radius: 30px;
+  color: black;
 }
 .item > h3 {
   font-weight: 500;
 }
 
 .todo-list-container {
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.5);
+  margin-top: 100px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  margin: 0 auto;
+  background-color: rgba(15, 15, 15, 0.76);
+  color: rgba(255, 255, 255, 0.877);
+  border-radius: 30px;
 }
 .list-filter-container {
   padding-left: 20px;
+  position: relative;
+}
+#icon-filter {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  margin: 5px;
+  display: block;
+  max-width: 30px;
+  max-height: 30px;
+  cursor: pointer;
+}
+#icon-filter:hover {
+  background-color: rgb(200, 211, 40);
+  border-radius: 10px;
 }
 
 .info-block {
@@ -119,6 +146,7 @@ h1, h2, h3 {
 
 .control-block > button:hover {
   color: rgb(171, 240, 12);
+  background-color: black;
 }
 
 .control-block > button:not(:last-child) {
@@ -130,7 +158,7 @@ h1, h2, h3 {
 }
 .back-to-list-button {
   width: 125px;
-  color: orangered;
+  background-color: rgb(61, 155, 150);
 }
 .postpone-button {
   background-color: rgb(163, 122, 45);
@@ -150,4 +178,24 @@ h1, h2, h3 {
   font-size: 30px;
   text-transform: uppercase;
   color: rgb(105, 9, 9);
+}
+
+#counter {
+  position: absolute;
+  top: 5px;
+  right: 10%;
+  background: rgba(255, 255, 255, 0.233);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  padding: 5px;
+  background-color: rgba(47, 45, 80, 0.247);
+}
+
+#total-counter-text {
+  color: black;
+  padding-right: 5px;
+}
+
+#total-counter-number {
+  color: rgba(32, 42, 99, 0.61);
 }

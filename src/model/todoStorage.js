@@ -1,5 +1,4 @@
 import Todo from "./todo.js";
-import todo from "./todo.js";
 
 class TodoStorage {
   constructor() {

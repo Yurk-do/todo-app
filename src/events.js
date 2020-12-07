@@ -1,14 +1,12 @@
 function setupEventListenerByName(doc, elementId, eventName, handler) {
   const element = doc.getElementById(elementId);
   if (element !== null) {
-    element.removeEventListener(eventName, handler);
     element.addEventListener(eventName, handler);
   }
 }
 
 function setupEventListener(element, eventName, handler) {
   if (element !== null) {
-    element.removeEventListener(eventName, handler);
     element.addEventListener(eventName, handler);
   }
 }
