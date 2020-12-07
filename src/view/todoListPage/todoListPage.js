@@ -77,7 +77,7 @@ function renderTodoTotal(doc, totalCount) {
 function renderFilter(doc) {
   const filterDiv = createElement(doc, "div", "list-filter-container");
   const iconFilter = createElement(doc, "img");
-  iconFilter.src = "../../../img/filter.png";
+  iconFilter.src = "../img/filter.png";
   iconFilter.id = "icon-filter";
   filterDiv.append(iconFilter);
 
