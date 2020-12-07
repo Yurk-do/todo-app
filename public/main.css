@@ -21,6 +21,7 @@ body {
     background: rgba(255, 255, 255, 0.233);
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
     border-radius: 20px;
+    padding-bottom: 10px;
 }
 h1, h2, h3 {
   padding-top: 20px;
@@ -60,7 +61,7 @@ h1, h2, h3 {
 } 
 
 .form-row-right > input:hover {
-  background: rgba(48, 5, 5, 0.678);
+  background: rgba(19, 18, 18, 0.884);
 }
 
 #todo-text {
@@ -84,7 +85,7 @@ h1, h2, h3 {
   color: black;
 }
 .item > h3 {
-  font-weight: 500;
+  font-weight: 500; 
 }
 
 .todo-list-container {
@@ -96,6 +97,7 @@ h1, h2, h3 {
   background-color: rgba(15, 15, 15, 0.76);
   color: rgba(255, 255, 255, 0.877);
   border-radius: 30px;
+  padding-bottom: 10px;
 }
 .list-filter-container {
   padding-left: 20px;
@@ -177,7 +179,7 @@ h1, h2, h3 {
   text-align: center;
   font-size: 30px;
   text-transform: uppercase;
-  color: rgb(105, 9, 9);
+  color: rgb(204, 86, 86);
 }
 
 #counter {
