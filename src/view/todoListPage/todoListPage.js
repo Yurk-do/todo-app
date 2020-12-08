@@ -74,12 +74,14 @@ function renderTodoTotal(doc, totalCount) {
   return h2;
 }
 
-function renderFilter(doc) {
+function renderStatPage(doc) {
   const filterDiv = createElement(doc, "div", "list-filter-container");
-  const iconFilter = createElement(doc, "img");
-  iconFilter.src = "../img/filter.png";
-  iconFilter.id = "icon-filter";
-  filterDiv.append(iconFilter);
+  filterDiv.innerHTML = "Show Statistics";
+
+  // const iconFilter = createElement(doc, "img");
+  // iconFilter.src = "../img/filter.png";
+  // iconFilter.id = "icon-filter";
+  // filterDiv.append(iconFilter);
 
   return filterDiv;
 }
@@ -112,7 +114,7 @@ function renderTodoListContent(doc, allTodo) {
   listContainer.append(renderTitle(doc, "My ToDos"));
 
   listContainer.append(renderTodoTotal(doc, allTodo.length));
-  listContainer.append(renderFilter(doc));
+  listContainer.append(renderStatPage(doc));
   listContainer.append(renderTodoList(doc, allTodo));
 
   return listContainer;
