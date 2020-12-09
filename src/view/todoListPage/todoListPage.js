@@ -76,12 +76,14 @@ function renderTodoTotal(doc, totalCount) {
 
 function renderStatPage(doc) {
   const filterDiv = createElement(doc, "div", "list-filter-container");
-  filterDiv.innerHTML = "Show Statistics";
-
-  // const iconFilter = createElement(doc, "img");
-  // iconFilter.src = "../img/filter.png";
-  // iconFilter.id = "icon-filter";
-  // filterDiv.append(iconFilter);
+  const linkStat = createElement(doc, "a");
+  linkStat.href = "#";
+  linkStat.id = "link-stat";
+  const iconStat = createElement(doc, "img");
+  iconStat.src = "../img/statistics.png";
+  iconStat.id = "icon-stat";
+  linkStat.append(iconStat);
+  filterDiv.append(linkStat);
 
   return filterDiv;
 }

@@ -41,6 +41,11 @@ function navigateToTodo(doc, event) {
   router.navigate(`todo/${todoId}`);
 }
 
+function renderStatPage(doc) {
+  const router = configureRouter(doc, "/");
+  router.navigate("report");
+}
+
 function notifyAboutTodoChange(doc) {
   const todoItemChanged = new Event("todo-item-changed");
   doc.dispatchEvent(todoItemChanged);
@@ -87,7 +92,6 @@ function todoListActionHandler(doc, event) {
       todoStorage.deleteById(todoId);
       notifyAboutDeletedTodo(doc);
       break;
-
     default:
       console.log("Panic! Unknown Action.");
   }
@@ -102,7 +106,8 @@ let boundClearFormHandlerTodoItemCreated = null;
 let boundUpdateTodoListTodoItemChanged = null;
 let boundUpdateTotalTodoCountTodoItemDeleted = null;
 let boundUpdateTodoListTodoItemDeleted = null;
-let boundRenderTodo = null;
+let boundNavigateToTodo = null;
+let boundNavigateToReportPage = null;
 
 export function getListEventHandlers(doc) {
   boundAddTodoHandler =
@@ -150,9 +155,15 @@ export function getListEventHandlers(doc) {
       ? boundUpdateTodoListTodoItemDeleted
       : updateTodoList.bind(null, doc);
 
-  boundRenderTodo =
-    boundRenderTodo !== null ? boundRenderTodo : navigateToTodo.bind(null, doc);
+  boundNavigateToTodo =
+    boundNavigateToTodo !== null
+      ? boundNavigateToTodo
+      : navigateToTodo.bind(null, doc);
 
+  boundNavigateToReportPage =
+    boundNavigateToReportPage !== null
+      ? boundNavigateToReportPage
+      : renderStatPage.bind(null, doc);
   return [
     {
       elementId: "add-todo-button",
@@ -168,6 +179,11 @@ export function getListEventHandlers(doc) {
       elementId: "todo-list",
       eventName: "click",
       handler: boundTodoListActionHandler,
+    },
+    {
+      elementId: "link-stat",
+      eventName: "click",
+      handler: boundNavigateToReportPage,
     },
     {
       element: doc,
@@ -202,7 +218,7 @@ export function getListEventHandlers(doc) {
     {
       element: doc,
       eventName: "todo-item-shown",
-      handler: boundRenderTodo,
+      handler: boundNavigateToTodo,
     },
   ];
 }
