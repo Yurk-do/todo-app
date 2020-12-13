@@ -77,7 +77,7 @@ function renderTodoTotal(doc, totalCount) {
 function renderStatPage(doc) {
   const filterDiv = createElement(doc, "div", "list-filter-container");
   const linkStat = createElement(doc, "a");
-  linkStat.href = "#/";
+  linkStat.href = "#";
   linkStat.id = "link-stat";
   const iconStat = createElement(doc, "img");
   iconStat.src = "todo-app/img/statistics.png";

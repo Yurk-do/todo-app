@@ -183,6 +183,11 @@ export function getListEventHandlers(doc) {
     {
       elementId: "link-stat",
       eventName: "click",
+      handler: (event) => event.preventDefault(),
+    },
+    {
+      elementId: "link-stat",
+      eventName: "click",
       handler: boundNavigateToReportPage,
     },
     {
