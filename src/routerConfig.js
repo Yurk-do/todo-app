@@ -4,6 +4,7 @@ import todoStorage from "./model/todoStorage.js";
 import renderTodoListPage from "./view/todoListPage/todoListPage.js";
 
 import renderTodoPage from "./view/todoPage/todoPage.js";
+import renderStatisticPage from "./view/statisticPage/statisticPage.js";
 
 let router = null;
 
@@ -27,6 +28,13 @@ export default (doc, appRootPath) => {
 
   router.add(/^report$/, () => {
     console.log("=> Navigating to report page");
+    renderStatisticPage(
+      doc,
+      todoStorage.totalTodoCount(),
+      todoStorage.totalPostponeCount(),
+      todoStorage.totalCompleteCount(),
+      todoStorage.totalDeleteCount()
+    );
   });
 
   router.config({ mode: "history", root: "/" });

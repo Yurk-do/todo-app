@@ -74,7 +74,7 @@ function renderTodoTotal(doc, totalCount) {
   return h2;
 }
 
-function renderStatPage(doc) {
+function renderStatLink(doc) {
   const filterDiv = createElement(doc, "div", "list-filter-container");
   const linkStat = createElement(doc, "a");
   linkStat.href = "#";
@@ -116,7 +116,7 @@ function renderTodoListContent(doc, allTodo) {
   listContainer.append(renderTitle(doc, "My ToDos"));
 
   listContainer.append(renderTodoTotal(doc, allTodo.length));
-  listContainer.append(renderStatPage(doc));
+  listContainer.append(renderStatLink(doc));
   listContainer.append(renderTodoList(doc, allTodo));
 
   return listContainer;
