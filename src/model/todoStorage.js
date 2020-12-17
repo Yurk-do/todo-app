@@ -23,15 +23,12 @@ class TodoStorage {
   }
 
   totalPostponeCount() {
-    console.log("postpone");
     return this.postponeCount;
   }
   totalCompleteCount() {
-    console.log("done");
     return this.completeCount;
   }
   totalDeleteCount() {
-    console.log("delete");
     return this.deleteCount;
   }
 

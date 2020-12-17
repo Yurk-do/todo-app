@@ -164,6 +164,7 @@ export function getListEventHandlers(doc) {
     boundNavigateToReportPage !== null
       ? boundNavigateToReportPage
       : renderStatPage.bind(null, doc);
+
   return [
     {
       elementId: "add-todo-button",

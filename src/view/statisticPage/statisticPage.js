@@ -1,5 +1,5 @@
 import { createElement, clearRootElement } from "../../helpers.js";
-import configureRouter from "../../routerConfig.js";
+import getBackToHomeButton from "../../events/statPageEvents.js";
 
 function renderStatisticBlock(
   doc,
@@ -46,12 +46,6 @@ export default function renderStatisticPage(
 
   const backButton = renderBackButton(doc);
 
-  backButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const router = configureRouter(doc, "/");
-    router.navigate("/");
-  });
-
   container.append(
     renderStatisticBlock(
       doc,
@@ -62,6 +56,6 @@ export default function renderStatisticPage(
     )
   );
   container.append(backButton);
-
   rootElement.append(container);
+  backButton.addEventListener("click", getBackToHomeButton);
 }

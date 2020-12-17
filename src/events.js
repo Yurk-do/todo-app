@@ -5,7 +5,7 @@ function setupEventListenerByName(doc, elementId, eventName, handler) {
   }
 }
 
-function setupEventListener(element, eventName, handler) {
+export function setupEventListener(element, eventName, handler) {
   if (element !== null) {
     element.addEventListener(eventName, handler);
   }
