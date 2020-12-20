@@ -1,19 +1,38 @@
 * {
   box-sizing: border-box;
 }
+body {
+  background: linear-gradient(#ccc, #fff);
+  font-family: 'Courier New', Courier, monospace;
+}
 
 #root {
+    min-height: 100vh;
     width: 100%;
+    font-weight: 700;
+    font-size: 20px;
 }
+
 #app-container {
-    border: 1px solid red;
-    width: 70%;
+    min-height: 100vh;
+    width: 80%;
     margin: 0 auto;
+    margin-top: 100px;
+    background: rgba(255, 255, 255, 0.233);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding-bottom: 10px;
+}
+h1, h2, h3 {
+  padding-top: 20px;
+  text-align: center;
 }
 
 .editor-form {
     display: flex;
     flex-direction: column;
+    width: 80%;
+    margin: auto;
 }
 
 .form-row-left {
@@ -28,28 +47,74 @@
   margin-top: 10px;
 }
 .form-row-right > input:not(:last-child) {
-  margin-right: 10px;
+  margin-right: 20px;
 } 
 
+.form-row-right > input {
+  border-radius: 20px;
+  height: 30px;
+  width: 80px;
+  background: rgba(0, 0, 0, 0.678);
+  color: white;
+  cursor: pointer;
+  transition: 0.5s;
+} 
+
+.form-row-right > input:hover {
+  background: rgba(19, 18, 18, 0.884);
+}
 
 #todo-text {
+    font-size: 20px;
     width: 100%;
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    border-radius: 5px;
 }
 
 .item {
-  border: 1px dotted gray;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
   margin-bottom: 10px;
+  background-color: rgba(172, 206, 224, 0.671);
+  border-radius: 30px;
+  color: black;
 }
 .item > h3 {
-  font-weight: 400;
+  font-weight: 500; 
 }
+
+.todo-list-container {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 100px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  background-color: rgba(15, 15, 15, 0.76);
+  color: rgba(255, 255, 255, 0.877);
+  border-radius: 30px;
+  padding-bottom: 10px;
+}
+.list-filter-container {
+  padding-left: 20px;
+  position: relative;
+}
+#icon-stat {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  margin: 5px;
+  display: block;
+  max-width: 40px;
+  max-height: 40px;
+}
+
 .info-block {
   display: flex;
 }
-
 .status-panel {
   flex-grow: 4;
 }
@@ -65,23 +130,102 @@
   text-align: right;
 }
 
-.view-button {
+.control-block > button {
+  height: 35px;
   width: 125px;
-  color: aquamarine;
+  border-radius: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.904);
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.control-block > button:hover {
+  color: rgb(171, 240, 12);
+  background-color: black;
+}
+
+.control-block > button:not(:last-child) {
+  margin-right: 20px;
+}
+
+.view-button {
+  background-color: rgb(97, 97, 172);
+}
+.back-to-list-button {
+  width: 125px;
+  background-color: rgb(61, 155, 150);
 }
 .postpone-button {
-  width: 125px;
-  color: orange;
+  background-color: rgb(163, 122, 45);
 }
 .resume-button {
-  width: 125px;
-  color: green;
+  background-color: rgb(71, 126, 71);
 }
 .delete-button {
-  width: 125px;
-  color: red;
+  background-color: rgb(100, 22, 22);
 }
 .done-button {
-  width: 125px;
-  color: blue;
+  background-color: rgb(31, 31, 116);
+}
+
+.empty-list {
+  text-align: center;
+  font-size: 30px;
+  text-transform: uppercase;
+  color: rgb(204, 86, 86);
+}
+
+#counter {
+  position: absolute;
+  top: 5px;
+  right: 10%;
+  background: rgba(255, 255, 255, 0.233);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  padding: 5px;
+  background-color: rgba(47, 45, 80, 0.247);
+}
+
+#total-counter-text {
+  color: black;
+  padding-right: 5px;
+}
+
+#total-counter-number {
+  color: rgba(32, 42, 99, 0.61);
+}
+
+#container-statistic {
+  width: 100%;
+  height: 100vh;
+}
+#stat-block {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 200px;
+  font-size: 30px;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.back-button-stat-page {
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  font-weight: 600;
+  background-color: rgba(19, 18, 18, 0.884);
+  color: white;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.back-button-stat-page:hover {
+  color: black;
+  background-color: rgba(44, 36, 36, 0.658);
 }

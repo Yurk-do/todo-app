@@ -1,4 +1,4 @@
-import { createElement } from "../helpers.js";
+import { createElement } from "../../helpers.js";
 import renderTodoItem from "./todo.js";
 
 function renderEmptyPlaceHolder(doc) {
@@ -19,7 +19,7 @@ export default function renderTodoList(doc, allTodo) {
   } else {
     allTodo.forEach((todo) => {
       const todoElement = renderTodoItem(doc, todo);
-      todoListElement.append(todoElement);
+      todoListElement.prepend(todoElement);
     });
   }
 }

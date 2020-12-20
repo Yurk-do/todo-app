@@ -10,3 +10,10 @@ export function createElement(doc, tagName, className) {
 
   return element;
 }
+
+export function clearRootElement(doc) {
+  const rootElement = doc.querySelector("#root");
+  rootElement.replaceChildren();
+
+  return rootElement;
+}

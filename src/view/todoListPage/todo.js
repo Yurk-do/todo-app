@@ -1,5 +1,5 @@
-import { createElement } from "../helpers.js";
-import todoState from "../model/todoState.js";
+import { createElement } from "../../helpers.js";
+import todoState from "../../model/todoState.js";
 
 function renderTextBlock(doc, todo) {
   const textItem = createElement(doc, "h3");
@@ -24,7 +24,9 @@ function renderStatusPanel(doc, todo) {
 function formatDateForPanel(prefix, date) {
   const datePart = `${date.getDate()}.${date.getMonth() + 1}.${date.getYear()}`;
 
-  const timePart = `${date.getHours()}:${date.getMinutes()}`;
+  const timePart = `${date.getHours()}:${
+    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
+  }`;
 
   return `${prefix}: ${datePart} - ${timePart}`;
 }
