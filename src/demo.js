@@ -1,16 +1,217 @@
-function sayHi1() {
-  console.log("Hi!!!!!!!!");
-}
-function sayHi2() {
-  console.log("Hello!!!!!!!!");
+// import { SourceCode } from "eslint";
+
+export function loadScript(scriptSrc, loadedCallback, errorCallback) {
+  console.log("Loading script .....");
+
+  let script = document.createElement("script");
+  script.src = scriptSrc;
+
+  script.onload = () => loadedCallback(scriptSrc);
+  script.onerror = () =>
+    errorCallback(new Error(`Script ${scriptSrc} loading failed`));
+
+  document.head.append(script);
 }
 
-function runner(callback1, callback2) {
-  const random = Math.random() * 100;
-  random < 50 ? callback1() : callback2();
+export function loadScriptP(scriptSrc) {
+  return new Promise((resolve, reject) => {
+    let script = document.createElement("script");
+    script.src = scriptSrc;
+
+    script.onload = () => resolve(scriptSrc);
+    script.onerror = () =>
+      reject(new Error(`Script ${scriptSrc} loading failed`));
+
+    document.head.append(script);
+  });
 }
 
-export function demo() {
-  console.log("Demo");
-  runner(sayHi1, sayHi2);
+function probe1loaded(src) {
+  console.log(`=> Script ${src} loaded...`);
+  probe1();
+  loadScript("/src/probes/probe2.js", probe2loaded, probeError);
+}
+
+function probe2loaded(src) {
+  console.log(`=> Script ${src} loaded...`);
+  probe2();
+  console.log("I am ready to use prob1 and probe2");
+}
+function probeError(error) {
+  console.log("### Load failed...");
+  console.log(error);
+}
+
+export function scriptDemo() {
+  loadScript("/src/probes/probe1.js", probe1loaded, probeError);
+
+  console.log("===> This line is next after loadScript");
+}
+
+export function timeoutDemo() {
+  console.log(`=> Start`);
+
+  const now = Date.now();
+
+  setTimeout(() => {
+    console.log(`Inside Timeout 2000...`);
+    const timeout1 = Date.now();
+    console.log(`1. ${timeout1 - now}`);
+  }, 2000);
+
+  console.log(`Between timouts`);
+
+  setTimeout(() => {
+    console.log(`Inside Timeout 5000...`);
+    const timeout2 = Date.now();
+    console.log(`2. ${timeout2 - now}`);
+  }, 5000);
+
+  console.log(`=> Processing`);
+  console.log(`=> End`);
+  console.log(now);
+}
+
+export function promiseBasicDemo() {
+  // producing code
+  // consuming code
+  // promise
+  const promiseExample = new Promise((resolve, reject) => {
+    // executor function === producing code
+    // resolve (value) = all is good
+    // reject (error) = all is bad
+    // state:
+    // pending - right after creation
+    // fulfield - right after resolve
+    // rejected - right after reject
+  });
+
+  promiseExample.then(
+    (result) => {
+      /*handle a successful result*/
+    },
+    (error) => {
+      /*handle and error */
+    }
+  );
+
+  const delayPromise = new Promise((resolve, reject) => {
+    console.log("Executor function run");
+    setTimeout(() => {
+      console.log("timeout passed");
+      const randomValue = Math.random() * 100;
+      console.log(`edge is ${randomValue}`);
+      randomValue <= 50 ? resolve(randomValue) : reject(new Error("Whooops!!"));
+    }, 2000);
+  });
+
+  delayPromise.then(
+    (result) => {
+      console.log(`Promise result ${result}`);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+  console.log("After promise");
+}
+
+export function promisifiedLoadScriptdemo() {
+  loadScriptP("/src/probes/probe1.js").then(
+    (src) => {
+      console.log(`Script path ${src}`);
+      probe1();
+    },
+    (error) => console.log(error)
+  );
+  console.log("After promise");
+}
+
+const delay = (ms) =>
+  new Promise((resolve) => setTimeout((_) => resolve(1), ms));
+
+export function chainingDemo() {
+  console.log("Before delay");
+  delay(1000)
+    .then((number) => {
+      console.log(`${number} After delay`);
+      return number + 1;
+    })
+    .then((nextNumber) => console.log(`${nextNumber} After promise`));
+  delay(1500)
+    .then((result) => {
+      console.log(`${result}`);
+      return result * 2;
+    })
+    .then((result) => {
+      console.log(`${result}`);
+      return result * 2;
+    })
+    .then((result) => {
+      console.log(`${result}`);
+      return result * 2;
+    })
+    .then((result) => {
+      console.log(`${result}`);
+      return result * 2;
+    })
+    .then((result) => {
+      console.log(`${result}`);
+    });
+
+  console.log("*********************");
+
+  const p = delay(2000);
+  p.then((result) => {
+    console.log(`${result}`);
+    return result * 2;
+  });
+  p.then((result) => {
+    console.log(`${result}`);
+    return result * 2;
+  });
+  p.then((result) => {
+    console.log(`${result}`);
+    return result * 2;
+  });
+  p.then((result) => {
+    console.log(`${result}`);
+  });
+}
+
+export function fullLoadScriptdemo() {
+  loadScriptP("/src/probes/probe1.js")
+    .then((src) => loadScriptP("/src/probes/probe2.js"))
+    .then((src) => loadScriptP("/src/probes/probe3.js"))
+    .then(() => {
+      probe1();
+      probe2();
+      probe3();
+    })
+    .then((_) => console.log(`After promise`))
+    .catch((error) => console.log(error))
+    .finally(() => console.log(`always executed`));
+}
+
+async function asyncDemo() {
+  await delay(1000);
+  console.log(`After delay`);
+  console.log(`After promise`);
+}
+
+async function asyncLoadDemo() {
+  await loadScriptP("/src/probes/probe1.js");
+  await loadScriptP("/src/probes/probe2.js");
+  await loadScriptP("/src/probes/probe3.js");
+  probe1();
+  probe2();
+  probe3();
+  console.log(`After promise`);
+  // .catch((error) => console.log(error))
+  console.log(`always executed`);
+}
+
+export async function demo() {
+  await asyncDemo();
+  await asyncLoadDemo();
 }
