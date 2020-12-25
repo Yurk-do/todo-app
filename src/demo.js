@@ -211,7 +211,43 @@ async function asyncLoadDemo() {
   console.log(`always executed`);
 }
 
-export async function demo() {
+async function doubleAsyncDemo() {
   await asyncDemo();
   await asyncLoadDemo();
+}
+
+export function demoTimeoutZero() {
+  function executorFunction(resolve, reject) {
+    console.log("running ex f");
+    setTimeout(() => {
+      resolve(42);
+    }, 0);
+  }
+  console.log("Hi!!!");
+
+  const p = new Promise(executorFunction);
+
+  p.then(() => console.log("from promise"));
+
+  console.log("Welcome to loupe");
+}
+
+export function demo() {
+  let start = Date.now();
+  Promise.all([delay(1000), delay(2000), delay(3000)]).then((_) => {
+    const timeout = Date.now() - start;
+    console.log(`All timeout: ${timeout}`);
+  });
+
+  start = Date.now();
+  Promise.race([delay(1000), delay(2000), delay(3000)]).then((_) => {
+    const timeout = Date.now() - start;
+    console.log(`Race timeout: ${timeout}`);
+  });
+
+  start = Date.now();
+  Promise.any([delay(1000), delay(2000), delay(3000)]).then((_) => {
+    const timeout = Date.now() - start;
+    console.log(`Any timeout: ${timeout}`);
+  });
 }
