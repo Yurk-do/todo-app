@@ -28,7 +28,7 @@ async function getAllTodo() {
     return;
   }
   console.log(`Ok with status: ${allTodoResponse.status}`);
-  return await allTodoResponse.json();
+  return await allTodoResponse;
 }
 
 function convertToTodo(todoDto) {

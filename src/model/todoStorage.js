@@ -1,21 +1,28 @@
 import Todo from "./todo.js";
 
+const apiRoot = "http://localhost:3000";
+
 class TodoStorage {
   constructor() {
-    this.storage = {};
-
-    this.currentId = 0;
-    this.todoCount = 0;
     this.postponeCount = 0;
     this.completeCount = 0;
     this.deleteCount = 0;
   }
 
-  createTodo(text) {
-    const newTodo = new Todo(text);
-    this.storage[this.currentId] = newTodo;
-    this.currentId += 1;
-    this.todoCount += 1;
+  async createTodo(todoText) {
+    const todo = new Todo(todoText);
+
+    const addResponse = await fetch(`${apiRoot}/todos/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(todo),
+    });
+
+    if (!addResponse.ok) {
+      console.log(`Error with status: ${addResponse.status}`);
+      return;
+    }
+    console.log(`Ok with status: ${addResponse.status}`);
   }
 
   totalTodoCount() {
@@ -32,54 +39,113 @@ class TodoStorage {
     return this.deleteCount;
   }
 
-  getTodoById(id) {
-    const todo = this.storage[id];
+  convertToViewDto(todoDto) {
     return {
-      id,
-      text: todo.text,
-      state: todo.state,
-      dateCreated: new Date(todo.dateCreated),
+      id: todoDto.id,
+      text: todoDto.text,
+      state: todoDto.state,
+      dateCreated: new Date(todoDto.dateCreated),
       dateCompleted:
-        todo.dateCompleted !== null ? new Date(todo.dateCompleted) : null,
+        todoDto.dateCompleted !== null ? new Date(todoDto.dateCompleted) : null,
     };
   }
 
-  postponeById(id) {
-    const todo = this.storage[id];
+  convertToTodo(todoDto) {
+    const todo = new Todo(todoDto.text);
+    todo.state = todoDto.state;
+    todo.dateCreated = new Date(todoDto.dateCreated);
+    todo.dateCompleted =
+      todoDto.dateCompleted === null ? null : new Date(todoDto.dateCompleted);
+    return todo;
+  }
+
+  async getTodoDtoById(id) {
+    const todoResponse = await fetch(`${apiRoot}/todos/${id}`);
+    if (!todoResponse.ok) {
+      console.log(`Error with status: ${todoResponse.status}`);
+      return;
+    }
+    console.log(`Ok with status: ${todoResponse.status}`);
+
+    return await todoResponse.json();
+  }
+
+  async getTodoById(id) {
+    return this.convertToViewDto(await this.getTodoDtoById(id));
+  }
+
+  async patchTodo(todoId, patch) {
+    const patchResponse = await fetch(`${apiRoot}/todos/${todoId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+
+    if (!patchResponse.ok) {
+      console.log(`Error with status: ${patchResponse.status}`);
+      return;
+    }
+    console.log(`Ok with status: ${patchResponse.status}`);
+    const patchedTodo = await patchResponse.json();
+
+    return patchedTodo.id;
+  }
+  async postponeById(id) {
+    const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.postpone();
+    const patch = { state: todo.state };
     this.postponeCount += 1;
+    return await this.patchTodo(id, patch);
   }
-  resumeById(id) {
-    const todo = this.storage[id];
+
+  async resumeById(id) {
+    const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.resume();
+    const patch = { state: todo.state };
     this.postponeCount -= 1;
+    return await this.patchTodo(id, patch);
   }
-  completeById(id) {
-    const todo = this.storage[id];
+
+  async completeById(id) {
+    const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.done();
+    const patch = { state: todo.state, dateCompleted: todo.dateCompleted };
     this.completeCount += 1;
+    return await this.patchTodo(id, patch);
   }
-  deleteById(id) {
-    delete this.storage[id];
-    this.todoCount -= 1;
+
+  async deleteById(id) {
+    const deleteResponse = await fetch(`${apiRoot}/todos/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!deleteResponse.ok) {
+      console.log(`Error with status: ${deleteResponse.status}`);
+      return;
+    }
+    console.log(`Ok with status: ${deleteResponse.status}`);
     this.deleteCount += 1;
   }
 
-  //   Копия массива с тудухами
-  getAllTodo() {
-    return Object.keys(this.storage).map((key) => {
-      const todo = this.storage[key];
-      return {
-        id: key,
-        text: todo.text,
-        state: todo.state,
-        dateCreated: new Date(todo.dateCreated),
-        dateCompleted:
-          todo.dateCompleted !== null ? new Date(todo.dateCompleted) : null,
-      };
-    });
+  async getAllTodo() {
+    const allTodoResponse = await fetch(`${apiRoot}/todos/`);
+
+    if (!allTodoResponse.ok) {
+      console.log(`Error with status ${allTodoResponse.status}`);
+      return;
+    }
+
+    console.log(`Ok with status ${allTodoResponse.status}`);
+
+    const returnedDto = await allTodoResponse.json();
+
+    this.todoCount = returnedDto.length;
+
+    return returnedDto.map((dto) => this.convertToViewDto(dto));
   }
 }
 
 const todoStorage = new TodoStorage();
+
 export default todoStorage;
