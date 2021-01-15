@@ -70,7 +70,6 @@ function renderTodoTotal(doc, totalCount) {
 
   h2.append(textSpan);
   h2.append(totalSpan);
-
   return h2;
 }
 

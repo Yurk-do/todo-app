@@ -24,7 +24,7 @@ function updateTotalTodoCount(doc) {
   console.log("Updating Total Todo Count");
 
   const h2 = doc.getElementById("total-counter-number");
-  h2.innerHTML = `${todoStorage.totalTodoCount()}`;
+  h2.innerHTML = `${todoStorage.stats.total}`;
 }
 
 async function updateTodoList(doc) {

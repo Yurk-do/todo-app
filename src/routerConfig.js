@@ -30,10 +30,10 @@ export default (doc, appRootPath) => {
     console.log("=> Navigating to report page");
     renderStatisticPage(
       doc,
-      todoStorage.totalTodoCount(),
-      todoStorage.totalPostponeCount(),
-      todoStorage.totalCompleteCount(),
-      todoStorage.totalDeleteCount()
+      todoStorage.stats.total,
+      todoStorage.stats.inProcess,
+      todoStorage.stats.postpone,
+      todoStorage.stats.done
     );
   });
 

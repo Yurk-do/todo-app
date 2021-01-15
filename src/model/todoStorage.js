@@ -4,15 +4,13 @@ const apiRoot = "http://localhost:3000";
 
 class TodoStorage {
   constructor() {
-    this.postponeCount = 0;
-    this.completeCount = 0;
-    this.deleteCount = 0;
+    this.stats = {};
   }
 
-  async createTodo(todoText) {
+  createTodo(todoText) {
     const todo = new Todo(todoText);
 
-    const addResponse = await fetch(`${apiRoot}/todos/`, {
+    const addResponse = fetch(`${apiRoot}/todos/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(todo),
@@ -23,20 +21,6 @@ class TodoStorage {
       return;
     }
     console.log(`Ok with status: ${addResponse.status}`);
-  }
-
-  totalTodoCount() {
-    return this.todoCount;
-  }
-
-  totalPostponeCount() {
-    return this.postponeCount;
-  }
-  totalCompleteCount() {
-    return this.completeCount;
-  }
-  totalDeleteCount() {
-    return this.deleteCount;
   }
 
   convertToViewDto(todoDto) {
@@ -94,7 +78,6 @@ class TodoStorage {
     const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.postpone();
     const patch = { state: todo.state };
-    this.postponeCount += 1;
     return await this.patchTodo(id, patch);
   }
 
@@ -102,7 +85,6 @@ class TodoStorage {
     const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.resume();
     const patch = { state: todo.state };
-    this.postponeCount -= 1;
     return await this.patchTodo(id, patch);
   }
 
@@ -110,7 +92,6 @@ class TodoStorage {
     const todo = this.convertToTodo(this.getTodoDtoById(id));
     todo.done();
     const patch = { state: todo.state, dateCompleted: todo.dateCompleted };
-    this.completeCount += 1;
     return await this.patchTodo(id, patch);
   }
 
@@ -125,7 +106,6 @@ class TodoStorage {
       return;
     }
     console.log(`Ok with status: ${deleteResponse.status}`);
-    this.deleteCount += 1;
   }
 
   async getAllTodo() {
@@ -140,7 +120,19 @@ class TodoStorage {
 
     const returnedDto = await allTodoResponse.json();
 
-    this.todoCount = returnedDto.length;
+    this.stats = {
+      inProcess: 0,
+      done: 0,
+      postpone: 0,
+      total: 0,
+    };
+
+    returnedDto.forEach((dto) => {
+      if (dto.state === "in-process") this.stats.inProcess += 1;
+      if (dto.state === "done") this.stats.done += 1;
+      if (dto.state === "postponed") this.stats.postpone += 1;
+      this.stats.total += 1;
+    });
 
     return returnedDto.map((dto) => this.convertToViewDto(dto));
   }

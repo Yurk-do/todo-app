@@ -4,24 +4,24 @@ import getBackToHomeButton from "../../events/statPageEvents.js";
 function renderStatisticBlock(
   doc,
   totalCount,
+  totalInProcess,
   totalPostpone,
-  totalComlpete,
-  totalDelete
+  totalComlpete
 ) {
   const statBlock = createElement(doc, "div");
   statBlock.id = "stat-block";
   const countAllTodo = createElement(doc, "p", "statistic-info");
   countAllTodo.innerHTML = `All TODOs: ${totalCount}`;
+  const countInProcess = createElement(doc, "p", "statistic-info");
+  countInProcess.innerHTML = `TODOs In process: ${totalInProcess}`;
   const countPostpone = createElement(doc, "p", "statistic-info");
   countPostpone.innerHTML = `TODOs Postponed: ${totalPostpone}`;
   const countDone = createElement(doc, "p", "statistic-info");
   countDone.innerHTML = `TODOs Completed: ${totalComlpete}`;
-  const countDelete = createElement(doc, "p", "statistic-info");
-  countDelete.innerHTML = `TODOs Deleted: ${totalDelete}`;
   statBlock.append(countAllTodo);
+  statBlock.append(countInProcess);
   statBlock.append(countPostpone);
   statBlock.append(countDone);
-  statBlock.append(countDelete);
 
   return statBlock;
 }
@@ -37,7 +37,7 @@ export default function renderStatisticPage(
   totalCount,
   totalPostpone,
   totalComlpete,
-  totalDelete
+  totalInProcess
 ) {
   const rootElement = clearRootElement(doc);
 
@@ -52,7 +52,7 @@ export default function renderStatisticPage(
       totalCount,
       totalPostpone,
       totalComlpete,
-      totalDelete
+      totalInProcess
     )
   );
   container.append(backButton);
